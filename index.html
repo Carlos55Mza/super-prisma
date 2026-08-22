@@ -33,9 +33,36 @@ footer{background:var(--deep);color:#dce7fa;text-align:center;padding:45px 20px}
 
 @media(max-width:1000px){.grid,.feature-grid{grid-template-columns:repeat(2,1fr)}.quick{grid-template-columns:repeat(3,1fr)}.hero-inner,.story,.games,.missions{grid-template-columns:1fr}.qr{grid-template-columns:1fr}.modalbox{grid-template-columns:1fr}.modalbox>img{max-height:350px}}
 @media(max-width:650px){.links{display:none}.menu{display:block}.nav{padding:8px 4%}.hero-inner{padding:55px 5%}.section{padding:55px 5%}.hero h1{font-size:49px}.quick{grid-template-columns:1fr 1fr;margin:-35px 5% 0}.grid,.feature-grid{grid-template-columns:1fr 1fr;gap:10px}.section-head{display:block}.collection-top{display:block}.counter{margin-bottom:12px}.progress{display:block}.games{grid-template-columns:1fr}.hero-character img{width:90%}.speech{right:0;top:-15px;max-width:160px;font-size:13px}}
+
+
+/* --- V4: cuentas + códigos únicos de figuritas --- */
+.account-tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.user-chip{background:rgba(255,255,255,.55);padding:7px 12px;border-radius:999px}
+.redeem-wrap{display:grid;grid-template-columns:1.15fr .85fr;gap:22px;align-items:stretch}
+.redeem-card,.profile-card{background:#fff;border-radius:26px;padding:30px;box-shadow:0 8px 25px rgba(13,32,62,.08)}
+.redeem-input{display:flex;gap:10px;margin-top:18px}.redeem-input input{flex:1;padding:15px 16px;border:2px solid #dbe2ec;border-radius:14px;font-size:18px;font-weight:900;text-transform:uppercase;letter-spacing:1px}.redeem-input input:focus{outline:none;border-color:var(--blue)}
+.notice{margin-top:14px;padding:12px 14px;border-radius:14px;font-weight:800;display:none}.notice.ok{display:block;background:#eaf8ef;color:#237a42}.notice.err{display:block;background:#fff0ef;color:#ad312b}.notice.info{display:block;background:#eef5ff;color:#215caa}
+.profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}.stat{background:var(--paper);border-radius:18px;padding:18px;text-align:center}.stat b{display:block;font-size:30px}.stat span{font-size:12px;color:var(--muted);font-weight:900}
+.card.locked-card .card-action{display:none}.owned-badge{position:absolute;right:10px;top:10px;background:#45b96b;color:white;padding:7px 10px;border-radius:999px;font-size:11px;font-weight:900}.code-note{color:var(--muted);font-size:13px;line-height:1.5}
+.admin-fab{position:fixed;right:18px;bottom:18px;z-index:80;border:0;border-radius:999px;background:#09152d;color:white;padding:12px 16px;font-weight:900;cursor:pointer;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+.admin-panel{display:none;position:fixed;inset:0;z-index:500;padding:20px;place-items:center}.admin-panel.open{display:grid}.admin-box{position:relative;z-index:2;width:min(900px,100%);max-height:90vh;overflow:auto;background:white;border-radius:26px;padding:28px;box-shadow:0 30px 90px rgba(0,0,0,.45)}.admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.admin-box input,.admin-box select{width:100%;padding:12px;border:1px solid #ccd5e2;border-radius:12px;margin-top:7px}.code-list{font-family:monospace;background:#f5f8fc;border-radius:14px;padding:14px;max-height:250px;overflow:auto;white-space:pre-wrap;font-size:12px}.mode-banner{background:#fff3c4;color:#684d00;text-align:center;padding:8px 12px;font-weight:900;font-size:12px}
+@media(max-width:850px){.redeem-wrap,.admin-grid{grid-template-columns:1fr}.redeem-input{flex-direction:column}}
+
 </style>
 </head>
 <body>
+
+<div id="loginOverlay" style="position:fixed;inset:0;background:linear-gradient(135deg,#071127,#1466d2);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;">
+  <div style="background:#fff;border-radius:24px;padding:28px;max-width:360px;width:100%;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.35)">
+    <h1 style="margin:0;color:#1466d2">Super Prisma</h1>
+    <p style="color:#62708a">Creá tu usuario con un apodo y un PIN personal de 6 dígitos. Ese PIN será tu llave para volver a tu álbum.</p>
+    <input id="nick" placeholder="Apodo" style="width:100%;padding:12px;border-radius:10px;border:1px solid #ccc;margin:8px 0">
+    <input id="pin" placeholder="PIN de 6 dígitos" maxlength="6" style="width:100%;padding:12px;border-radius:10px;border:1px solid #ccc;margin:8px 0">
+    <button onclick="loginUser()" style="width:100%;padding:12px;border:0;border-radius:999px;background:#1466d2;color:#fff;font-weight:bold;margin-top:8px">Entrar / Crear álbum</button>
+    <p id="loginMsg" style="font-size:12px;color:#62708a;margin-top:10px">Primera vez: elegí un apodo y un PIN. Si ya tenés cuenta, usá los mismos datos.</p>
+  </div>
+</div>
+
 <header class="top">
   <div class="nav">
     <img class="logo" src="assets/logo-prisma.jpg" alt="Prisma Alimentos">
@@ -45,6 +72,16 @@ footer{background:var(--deep);color:#dce7fa;text-align:center;padding:45px 20px}
     <button class="menu" onclick="document.querySelector('.links').classList.toggle('show')">☰</button>
   </div>
 </header>
+
+<div id="modeBanner" class="mode-banner">Modo local de prueba: las cuentas y los códigos se guardan en este dispositivo. Para publicar con seguridad hay que activar la base de datos online.</div>
+<div id="userBar" style="display:none;background:#ffd23f;padding:10px 20px;font-weight:bold;justify-content:space-between;align-items:center;gap:12px">
+  <span id="welcomeText" class="user-chip"></span>
+  <div class="account-tools">
+    <button onclick="document.querySelector('#canjear').scrollIntoView({behavior:'smooth'})" style="border:0;background:#fff;color:#09152d;padding:8px 14px;border-radius:999px;font-weight:900">Ingresar código</button>
+    <button onclick="logoutUser()" style="border:0;background:#09152d;color:#fff;padding:8px 14px;border-radius:999px">Cerrar sesión</button>
+  </div>
+</div>
+
 
 <section id="academia" class="hero">
   <div class="hero-inner">
@@ -74,7 +111,7 @@ footer{background:var(--deep);color:#dce7fa;text-align:center;padding:45px 20px}
 
 <section id="coleccion" class="section">
   <div class="section-head">
-    <div><div class="eyebrow">ÁLBUM DIGITAL</div><h2>Mi colección</h2><p class="lead">Descubrí los 16 personajes actuales de Super Prisma. Tocá cualquiera para conocerlo y marcá los que ya tenés.</p></div>
+    <div><div class="eyebrow">ÁLBUM DIGITAL</div><h2>Mi colección</h2><p class="lead">Descubrí los 16 personajes actuales de Super Prisma. Las figuritas se desbloquean ingresando el código único que viene con cada una.</p></div>
   </div>
   <div class="collection-top">
     <div class="counter"><span id="count">0</span><br><small>de 16</small></div>
@@ -89,10 +126,35 @@ footer{background:var(--deep);color:#dce7fa;text-align:center;padding:45px 20px}
   <div id="grid" class="grid"></div>
 </section>
 
+<section id="canjear" class="section">
+  <div class="eyebrow">TU FIGURITA, TU CÓDIGO</div>
+  <h2>Desbloquear una figurita</h2>
+  <p class="lead">Ingresá el código único de tu figurita. Si es válido y todavía no fue usado, el personaje se agregará automáticamente a tu álbum.</p>
+  <div class="redeem-wrap">
+    <div class="redeem-card">
+      <h3>🔐 Ingresá tu código</h3>
+      <div class="redeem-input">
+        <input id="stickerCode" maxlength="20" placeholder="Ej: SP07-K4M9-X82P" autocomplete="off">
+        <button class="btn primary" onclick="redeemCode()">Desbloquear</button>
+      </div>
+      <div id="redeemMsg" class="notice"></div>
+      <p class="code-note">Cada código puede usarse una sola vez. Una vez canjeado queda asociado a tu usuario.</p>
+    </div>
+    <div class="profile-card">
+      <h3>🎒 Mi perfil</h3>
+      <p id="profileName" class="lead">Ingresá para ver tu progreso.</p>
+      <div class="profile-grid">
+        <div class="stat"><b id="profileCount">0</b><span>FIGURITAS</span></div>
+        <div class="stat"><b id="profilePct">0%</b><span>COLECCIÓN</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="section">
   <div class="eyebrow">LA ACADEMIA CRECE</div><h2>¿Qué podés hacer?</h2>
   <div class="feature-grid">
-    <div class="feature"><div class="icon">🃏</div><h3>Coleccioná</h3><p>Escaneá el QR de tu paquete y agregá la figurita a tu álbum digital.</p><button class="btn dark small" onclick="document.querySelector('#coleccion').scrollIntoView()">Abrir álbum</button></div>
+    <div class="feature"><div class="icon">🃏</div><h3>Coleccioná</h3><p>Ingresá el código único de tu figurita y sumala a tu álbum digital.</p><button class="btn dark small" onclick="document.querySelector('#coleccion').scrollIntoView()">Abrir álbum</button></div>
     <div class="feature"><div class="icon">🏆</div><h3>Completá misiones</h3><p>Superá desafíos y conseguí insignias de la Academia.</p><button class="btn dark small" onclick="document.querySelector('#misiones').scrollIntoView()">Ver misiones</button></div>
     <div class="feature"><div class="icon">🎮</div><h3>Jugá</h3><p>Entrená tu memoria y poné a prueba cuánto sabés del universo Prisma.</p><button class="btn dark small" onclick="document.querySelector('#juegos').scrollIntoView()">Jugar</button></div>
     <div class="feature"><div class="icon">📖</div><h3>Descubrí historias</h3><p>Conocé a los héroes y villanos y seguí sus aventuras.</p><button class="btn dark small" onclick="document.querySelector('#historias').scrollIntoView()">Leer</button></div>
@@ -139,7 +201,7 @@ footer{background:var(--deep);color:#dce7fa;text-align:center;padding:45px 20px}
 <section id="qr" class="section">
   <div class="qr">
     <div class="fakeqr">QR</div>
-    <div><div class="eyebrow">DEL ENVASE A LA ACADEMIA</div><h2>Escaneá y desbloqueá</h2><p class="lead">En la versión definitiva, cada paquete de Super Prisma llevará un QR que llevará directamente a la Academia. Allí se podrá descubrir el personaje correspondiente y agregarlo al álbum.</p><ul><li>Experiencia sin registro obligatorio.</li><li>No pedir nombres, teléfonos ni correos a chicos.</li><li>Colección guardada localmente en el dispositivo.</li><li>Preparado para crecer con juegos, historias e insignias.</li></ul></div>
+    <div><div class="eyebrow">DEL ENVASE A LA ACADEMIA</div><h2>Escaneá y desbloqueá</h2><p class="lead">El QR del envase lleva a la Academia Super Prisma. Después, cada figurita se desbloquea con su código único y queda guardada en la cuenta del jugador.</p><ul><li>Usuario mediante apodo, sin pedir nombre real, teléfono ni correo.</li><li>PIN personal de 6 dígitos para volver al álbum.</li><li>Código único de un solo uso para cada figurita.</li><li>Preparado para conectar a una base de datos online y usar la cuenta desde cualquier dispositivo.</li></ul></div>
   </div>
 </section>
 
@@ -154,42 +216,133 @@ footer{background:var(--deep);color:#dce7fa;text-align:center;padding:45px 20px}
   <div class="modalbox">
     <button class="close" onclick="closeModal()">×</button>
     <img id="mi" src="" alt="">
-    <div class="modalinfo"><span id="mr" class="tag"></span><h2 id="mn"></h2><h3 id="mp"></h3><p id="ms"></p><button id="mc" class="btn primary" onclick="toggleCollect()">Marcar como coleccionado</button><span id="mstatus" class="collect-status"></span></div>
+    <div class="modalinfo"><span id="mr" class="tag"></span><h2 id="mn"></h2><h3 id="mp"></h3><p id="ms"></p><button id="mc" class="btn primary" onclick="document.querySelector('#canjear').scrollIntoView({behavior:'smooth'});closeModal()">Ingresar código</button><span id="mstatus" class="collect-status"></span></div>
+  </div>
+</div>
+
+
+<button class="admin-fab" onclick="openAdmin()" title="Administración">⚙️ Admin</button>
+<div id="adminPanel" class="admin-panel">
+  <div class="backdrop" onclick="closeAdmin()"></div>
+  <div class="admin-box">
+    <button class="close" onclick="closeAdmin()">×</button>
+    <div id="adminGate">
+      <div class="eyebrow">ADMINISTRACIÓN</div><h2>Panel Super Prisma</h2>
+      <p class="lead">Este panel local sirve para generar y exportar códigos de prueba. Para producción, la administración debe quedar protegida en el servidor.</p>
+      <input id="adminPass" type="password" placeholder="Clave de administrador de prueba">
+      <button class="btn dark" style="margin-top:10px" onclick="unlockAdmin()">Entrar</button>
+      <div id="adminGateMsg" class="notice"></div>
+    </div>
+    <div id="adminContent" style="display:none">
+      <div class="eyebrow">CÓDIGOS DE FIGURITAS</div><h2>Generador de códigos</h2>
+      <div class="admin-grid">
+        <div>
+          <label><b>Personaje</b></label>
+          <select id="adminCharacter"></select>
+        </div>
+        <div>
+          <label><b>Cantidad</b></label>
+          <input id="adminQty" type="number" min="1" max="5000" value="20">
+        </div>
+      </div>
+      <div class="buttons">
+        <button class="btn primary" onclick="generateCodes()">Generar códigos</button>
+        <button class="btn dark" onclick="exportCodesCSV()">Exportar CSV</button>
+      </div>
+      <div id="adminStats" class="notice info"></div>
+      <div id="codeList" class="code-list">Todavía no generaste códigos en este dispositivo.</div>
+    </div>
   </div>
 </div>
 
 <script>
 const characters=[{"id": 1, "name": "Capitán Prisma", "role": "Héroe", "power": "Superenergía total", "story": "El líder de los superhéroes Prisma. Fuerza, inteligencia y corazón.", "image": "assets/personajes/01-capitan-prisma.jpg"}, {"id": 2, "name": "Capitana Prisma", "role": "Héroe", "power": "Liderazgo y equilibrio", "story": "Su sabiduría y valor guían al equipo siempre.", "image": "assets/personajes/02-capitana-prisma.jpg"}, {"id": 3, "name": "Capitán Almendra", "role": "Héroe", "power": "Inteligencia y concentración", "story": "Su mente ágil lo hace uno de los estrategas del equipo.", "image": "assets/personajes/03-capitan-almendra.jpg"}, {"id": 4, "name": "Rayo Cajú", "role": "Héroe", "power": "Energía infinita", "story": "Nada lo detiene: su energía es imparable.", "image": "assets/personajes/04-rayo-caju.jpg"}, {"id": 5, "name": "Nuez Titán", "role": "Héroe", "power": "Fuerza y resistencia", "story": "El gran protector del equipo. Un verdadero titán.", "image": "assets/personajes/05-nuez-titan.jpg"}, {"id": 6, "name": "Maní Max", "role": "Héroe", "power": "Super fuerza", "story": "Su fuerza es colosal y siempre protege a sus amigos.", "image": "assets/personajes/06-mani-max.jpg"}, {"id": 7, "name": "Bananix", "role": "Héroe", "power": "Velocidad extrema", "story": "Rápido como el viento, siempre llega a tiempo.", "image": "assets/personajes/07-bananix.jpg"}, {"id": 8, "name": "Arándana", "role": "Héroe", "power": "Vista y reflejos", "story": "Nada escapa a su atenta mirada.", "image": "assets/personajes/08-arandana.jpg"}, {"id": 9, "name": "Doctor Azúcar", "role": "Villano", "power": "La tentación", "story": "Quiere llenar la ciudad de excesos y hacer que todos pierdan el equilibrio.", "image": "assets/personajes/09-doctor-azucar.jpg"}, {"id": 10, "name": "Aceite Negro", "role": "Villano", "power": "Pesadez", "story": "Intenta dejar a todos sin energía y movimiento.", "image": "assets/personajes/10-aceite-negro.jpg"}, {"id": 11, "name": "Señor Exceso", "role": "Villano", "power": "Falta de control", "story": "Su poder es hacer que nadie sepa cuándo parar.", "image": "assets/personajes/11-senor-exceso.jpg"}, {"id": 12, "name": "Desnutrición", "role": "Villano", "power": "Debilidad", "story": "Busca dejar a las personas sin energía ni fuerzas.", "image": "assets/personajes/12-desnutrion.jpg"}, {"id": 13, "name": "Sal Extrema", "role": "Villano", "power": "Desequilibrio", "story": "Intenta que todos olviden la importancia del equilibrio.", "image": "assets/personajes/13-sal-extrema.jpg"}, {"id": 14, "name": "Naturaleza en Peligro", "role": "Villano", "power": "Contaminación", "story": "Daña el planeta y pone en peligro nuestro hogar.", "image": "assets/personajes/14-naturaleza-en-peligro.jpg"}, {"id": 15, "name": "Sr. Artificial", "role": "Villano", "power": "Lo artificial", "story": "Quiere llenar todo de ingredientes que nadie necesita.", "image": "assets/personajes/15-sr-artificial.jpg"}, {"id": 16, "name": "Dulce Tentación", "role": "Villano", "power": "Adicción", "story": "Te convence de que siempre necesitás un poquito más.", "image": "assets/personajes/16-dulce-tentacion.jpg"}];
-const key="superPrismaV2Collection";let collected=JSON.parse(localStorage.getItem(key)||"[]");let selected=null;let filter="Todos";
-function save(){localStorage.setItem(key,JSON.stringify(collected))}
+const USERS_KEY="SP_USERS_V2";
+const CODES_KEY="SP_CODES_V2";
+const SESSION_KEY="SP_SESSION_V2";
+let currentUser=null, selected=null, filter="Todos", collected=[];
+
+function usersDB(){try{return JSON.parse(localStorage.getItem(USERS_KEY)||"{}")}catch(e){return {}}}
+function saveUsers(o){localStorage.setItem(USERS_KEY,JSON.stringify(o))}
+function codesDB(){try{return JSON.parse(localStorage.getItem(CODES_KEY)||"{}")}catch(e){return {}}}
+function saveCodes(o){localStorage.setItem(CODES_KEY,JSON.stringify(o))}
+function normalizeUser(n){return n.trim().toLowerCase()}
+function normalizeCode(c){return c.trim().toUpperCase().replace(/\s+/g,"")}
+
+function loginUser(){
+ const raw=document.getElementById("nick").value.trim(), key=normalizeUser(raw), p=document.getElementById("pin").value.trim();
+ const msg=document.getElementById("loginMsg");
+ if(!raw || !/^\d{6}$/.test(p)){msg.textContent="Ingresá un apodo y un PIN de exactamente 6 dígitos.";return}
+ const d=usersDB();
+ if(d[key] && d[key].pin!==p){msg.textContent="Ese apodo ya existe y el PIN no coincide.";return}
+ if(!d[key]) d[key]={displayName:raw,pin:p,collected:[],createdAt:new Date().toISOString()};
+ currentUser=key; collected=Array.isArray(d[key].collected)?d[key].collected:[]; saveUsers(d); localStorage.setItem(SESSION_KEY,key);
+ showLoggedIn(); render();
+}
+function showLoggedIn(){
+ const d=usersDB(), u=d[currentUser]; if(!u)return;
+ document.getElementById("loginOverlay").style.display="none";document.getElementById("userBar").style.display="flex";
+ document.getElementById("welcomeText").textContent="Hola, "+u.displayName+" 👋";
+ document.getElementById("profileName").textContent="Álbum de "+u.displayName;
+ updateProgress();
+}
+function logoutUser(){currentUser=null;collected=[];localStorage.removeItem(SESSION_KEY);document.getElementById("loginOverlay").style.display="flex";document.getElementById("userBar").style.display="none";document.getElementById("nick").value="";document.getElementById("pin").value=""}
+function saveCollection(){if(!currentUser)return;const d=usersDB();if(!d[currentUser])return;d[currentUser].collected=[...new Set(collected)].sort((a,b)=>a-b);saveUsers(d)}
+
 function render(){
  const grid=document.getElementById("grid");grid.innerHTML="";
  characters.filter(c=>filter==="Todos"||c.role===filter).forEach(c=>{
-  const yes=collected.includes(c.id);const el=document.createElement("article");el.className="card"+(yes?" collected":"");
-  el.innerHTML=`<button onclick="openChar(${c.id})"><img class="${yes?"":"locked"}" src="${c.image}" alt="${c.name}"><span class="num">${String(c.id).padStart(2,"0")}</span><span class="cname">${c.name}</span><span class="role">${c.role}</span><span class="status">${yes?"✓ Coleccionada":"☆ Por descubrir"}</span></button>`;
-  grid.appendChild(el)
- });
- updateProgress()
+   const yes=collected.includes(c.id), el=document.createElement("article");el.className="card"+(yes?" collected":" locked-card");
+   el.innerHTML=`<button onclick="openChar(${c.id})"><img class="${yes?"":"locked"}" src="${c.image}" alt="${c.name}">${yes?'<span class="owned-badge">✓ TUYA</span>':''}<span class="cname">${c.name}</span><span class="role">${c.role}</span><span class="status">${yes?"✓ Desbloqueada":"🔒 Bloqueada"}</span></button>`;
+   grid.appendChild(el)
+ }); updateProgress()
 }
-function updateProgress(){const n=collected.length,p=Math.round(n/16*100);document.getElementById("count").textContent=n;document.getElementById("pct").textContent=p+"%";document.getElementById("bar").style.width=p+"%"}
+function updateProgress(){const n=collected.length,p=Math.round(n/16*100);document.getElementById("count").textContent=n;document.getElementById("pct").textContent=p+"%";document.getElementById("bar").style.width=p+"%";document.getElementById("profileCount").textContent=n;document.getElementById("profilePct").textContent=p+"%"}
 document.querySelectorAll(".filter").forEach(b=>b.onclick=()=>{document.querySelectorAll(".filter").forEach(x=>x.classList.remove("active"));b.classList.add("active");filter=b.dataset.filter;render()});
-function openChar(id){selected=characters.find(c=>c.id===id);document.getElementById("mi").src=selected.image;document.getElementById("mi").alt=selected.name;document.getElementById("mr").textContent=selected.role;document.getElementById("mn").textContent=selected.name;document.getElementById("mp").textContent="⚡ Poder: "+selected.power;document.getElementById("ms").textContent=selected.story;const yes=collected.includes(id);document.getElementById("mc").textContent=yes?"Quitar de mi colección":"Marcar como coleccionado";document.getElementById("mstatus").textContent=yes?"✓ Ya está en tu colección":"";document.getElementById("modal").classList.add("open")}
+function openChar(id){selected=characters.find(c=>c.id===id);const yes=collected.includes(id);document.getElementById("mi").src=selected.image;document.getElementById("mi").alt=selected.name;document.getElementById("mr").textContent=selected.role;document.getElementById("mn").textContent=selected.name;document.getElementById("mp").textContent="⚡ Poder: "+selected.power;document.getElementById("ms").textContent=yes?selected.story:"Desbloqueá esta figurita con su código único para conocerla y sumarla a tu colección.";document.getElementById("mc").style.display=yes?"none":"inline-block";document.getElementById("mstatus").textContent=yes?"✓ Ya está en tu colección":"🔒 Todavía no la desbloqueaste";document.getElementById("modal").classList.add("open")}
 function closeModal(){document.getElementById("modal").classList.remove("open")}
-function toggleCollect(){if(!selected)return;if(collected.includes(selected.id))collected=collected.filter(x=>x!==selected.id);else collected.push(selected.id);save();openChar(selected.id);render();if(collected.length>=1)completeMission(2)}
 function randomCharacter(){openChar(characters[Math.floor(Math.random()*characters.length)].id)}
-function completeMission(n){localStorage.setItem("spMission"+n,"1");document.getElementById("m"+n).classList.add("done");const b=document.querySelector("#m"+n+" button");if(b)b.textContent="✓ Completada"}
+
+function redeemCode(){
+ const box=document.getElementById("redeemMsg"); box.className="notice"; box.textContent="";
+ if(!currentUser){box.className="notice err";box.textContent="Primero ingresá a tu cuenta.";return}
+ const code=normalizeCode(document.getElementById("stickerCode").value); if(!code){box.className="notice err";box.textContent="Ingresá el código de la figurita.";return}
+ const codes=codesDB(), item=codes[code];
+ if(!item){box.className="notice err";box.textContent="Ese código no existe o todavía no fue cargado al sistema.";return}
+ if(item.redeemedBy && item.redeemedBy!==currentUser){box.className="notice err";box.textContent="Ese código ya fue utilizado.";return}
+ const char=characters.find(c=>c.id===item.characterId); if(!char){box.className="notice err";box.textContent="El código no tiene un personaje válido asignado.";return}
+ if(!collected.includes(char.id)) collected.push(char.id);
+ codes[code].redeemedBy=currentUser;codes[code].redeemedAt=codes[code].redeemedAt||new Date().toISOString();saveCodes(codes);saveCollection();render();
+ document.getElementById("stickerCode").value="";box.className="notice ok";box.textContent="🎉 ¡Desbloqueaste a "+char.name+"! Ya está en tu álbum.";completeMission(2)
+}
+
+document.getElementById("stickerCode").addEventListener("keydown",e=>{if(e.key==="Enter")redeemCode()});
+
+function completeMission(n){localStorage.setItem("spMission"+n,"1");const m=document.getElementById("m"+n);if(!m)return;m.classList.add("done");const b=m.querySelector("button");if(b)b.textContent="✓ Completada"}
 function checkCollection(){alert("Tu colección está en "+collected.length+" de 16 personajes.");document.querySelector("#coleccion").scrollIntoView()}
 function storyAlert(){alert("Capítulo 1: Los Guardianes Prisma reciben una nueva misión... ¡Próximamente podremos convertir esto en una historieta interactiva completa!")}
 const emojis=["🦸","🌰","⚡","🍌"];let mem=[];
 function startMemory(){const board=document.getElementById("memory");board.innerHTML="";document.getElementById("memoryMsg").textContent="";mem=["🦸","🌰","⚡","🍌","🦸","🌰","⚡","🍌"].sort(()=>Math.random()-.5);let opened=[],matched=0;mem.forEach((e,i)=>{const b=document.createElement("button");b.className="memory-card";b.textContent="❓";b.onclick=()=>{if(b.classList.contains("open")||b.classList.contains("matched")||opened.length===2)return;b.classList.add("open");b.textContent=e;opened.push({b,e});if(opened.length===2){if(opened[0].e===opened[1].e){opened.forEach(x=>x.b.classList.add("matched"));opened=[];matched+=2;if(matched===8){document.getElementById("memoryMsg").textContent="🏆 ¡Completaste el desafío!";completeMission(3)}}else{setTimeout(()=>{opened.forEach(x=>{x.b.classList.remove("open");x.b.textContent="❓"});opened=[]},650)}}};board.appendChild(b)})}
-const quizzes=[
-["¿Quién es un héroe?","Capitán Almendra",["Capitán Almendra","Doctor Azúcar","Señor Exceso"]],
-["¿Quién pertenece a los villanos?","Doctor Azúcar",["Arándana","Doctor Azúcar","Rayo Cajú"]],
-["¿Cuál es un héroe?","Rayo Cajú",["Sal Extrema","Rayo Cajú","Sr. Artificial"]]
-];
-let q;
+const quizzes=[["¿Quién es un héroe?","Capitán Almendra",["Capitán Almendra","Doctor Azúcar","Señor Exceso"]],["¿Quién pertenece a los villanos?","Doctor Azúcar",["Arándana","Doctor Azúcar","Rayo Cajú"]],["¿Cuál es un héroe?","Rayo Cajú",["Sal Extrema","Rayo Cajú","Sr. Artificial"]]];let q;
 function newQuiz(){q=quizzes[Math.floor(Math.random()*quizzes.length)];document.getElementById("quizQuestion").textContent=q[0];const o=document.getElementById("quizOptions");o.innerHTML="";q[2].forEach(x=>{const b=document.createElement("button");b.className="quiz-option";b.textContent=x;b.onclick=()=>{const ok=x===q[1];document.getElementById("quizResult").textContent=ok?"🎉 ¡Correcto!":"❌ Casi... probá otra vez.";if(ok)completeMission(1)};o.appendChild(b)})}
-render();startMemory();newQuiz();[1,2,3].forEach(n=>{if(localStorage.getItem("spMission"+n))completeMission(n)})
+
+/* Panel de administración local (solo pruebas). En producción se reemplaza por backend seguro. */
+const ADMIN_TEST_KEY="PRISMA2026"; let lastGenerated=[];
+function openAdmin(){document.getElementById("adminPanel").classList.add("open")}
+function closeAdmin(){document.getElementById("adminPanel").classList.remove("open")}
+function unlockAdmin(){const v=document.getElementById("adminPass").value;const msg=document.getElementById("adminGateMsg");if(v!==ADMIN_TEST_KEY){msg.className="notice err";msg.textContent="Clave incorrecta.";return}document.getElementById("adminGate").style.display="none";document.getElementById("adminContent").style.display="block";refreshAdmin()}
+function randPart(n=4){const abc="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";return Array.from({length:n},()=>abc[Math.floor(Math.random()*abc.length)]).join("")}
+function makeCode(id){return `SP${String(id).padStart(2,"0")}-${randPart()}-${randPart()}`}
+function generateCodes(){const id=Number(document.getElementById("adminCharacter").value),qty=Math.max(1,Math.min(5000,Number(document.getElementById("adminQty").value)||1)),codes=codesDB();lastGenerated=[];for(let i=0;i<qty;i++){let code;do{code=makeCode(id)}while(codes[code]);codes[code]={characterId:id,createdAt:new Date().toISOString(),redeemedBy:null,redeemedAt:null};lastGenerated.push(code)}saveCodes(codes);refreshAdmin()}
+function refreshAdmin(){const codes=codesDB(), total=Object.keys(codes).length, used=Object.values(codes).filter(x=>x.redeemedBy).length;document.getElementById("adminStats").textContent=`Códigos creados: ${total} · Usados: ${used} · Disponibles: ${total-used}`;document.getElementById("codeList").textContent=lastGenerated.length?lastGenerated.join("\n"):"No hay una tanda recién generada. Podés crear una arriba."}
+function exportCodesCSV(){const codes=codesDB(), rows=[["codigo","figurita_id","personaje","estado","usuario","fecha_canje"]];Object.entries(codes).forEach(([code,x])=>{const ch=characters.find(c=>c.id===x.characterId);rows.push([code,x.characterId,ch?ch.name:"",x.redeemedBy?"USADO":"DISPONIBLE",x.redeemedBy||"",x.redeemedAt||""])});const csv=rows.map(r=>r.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(",")).join("\n"),blob=new Blob([csv],{type:"text/csv;charset=utf-8;"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="super-prisma-codigos.csv";a.click();URL.revokeObjectURL(url)}
+
+function init(){
+ const sel=document.getElementById("adminCharacter");characters.forEach(c=>{const o=document.createElement("option");o.value=c.id;o.textContent=`${String(c.id).padStart(2,"0")} · ${c.name}`;sel.appendChild(o)});
+ startMemory();newQuiz();[1,2,3].forEach(n=>{if(localStorage.getItem("spMission"+n))completeMission(n)});
+ const session=localStorage.getItem(SESSION_KEY),d=usersDB();if(session&&d[session]){currentUser=session;collected=d[session].collected||[];showLoggedIn();render()}else render();
+}
+init();
 </script>
 </body>
 </html>
