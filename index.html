@@ -255,6 +255,7 @@ footer{background:var(--deep);color:#dce7fa;text-align:center;padding:45px 20px}
   </div>
 </div>
 
+<script src="valid-codes.js"></script>
 <script>
 const characters=[{"id": 1, "name": "Capitán Prisma", "role": "Héroe", "power": "Superenergía total", "story": "El líder de los superhéroes Prisma. Fuerza, inteligencia y corazón.", "image": "assets/personajes/01-capitan-prisma.jpg"}, {"id": 2, "name": "Capitana Prisma", "role": "Héroe", "power": "Liderazgo y equilibrio", "story": "Su sabiduría y valor guían al equipo siempre.", "image": "assets/personajes/02-capitana-prisma.jpg"}, {"id": 3, "name": "Capitán Almendra", "role": "Héroe", "power": "Inteligencia y concentración", "story": "Su mente ágil lo hace uno de los estrategas del equipo.", "image": "assets/personajes/03-capitan-almendra.jpg"}, {"id": 4, "name": "Rayo Cajú", "role": "Héroe", "power": "Energía infinita", "story": "Nada lo detiene: su energía es imparable.", "image": "assets/personajes/04-rayo-caju.jpg"}, {"id": 5, "name": "Nuez Titán", "role": "Héroe", "power": "Fuerza y resistencia", "story": "El gran protector del equipo. Un verdadero titán.", "image": "assets/personajes/05-nuez-titan.jpg"}, {"id": 6, "name": "Maní Max", "role": "Héroe", "power": "Super fuerza", "story": "Su fuerza es colosal y siempre protege a sus amigos.", "image": "assets/personajes/06-mani-max.jpg"}, {"id": 7, "name": "Bananix", "role": "Héroe", "power": "Velocidad extrema", "story": "Rápido como el viento, siempre llega a tiempo.", "image": "assets/personajes/07-bananix.jpg"}, {"id": 8, "name": "Arándana", "role": "Héroe", "power": "Vista y reflejos", "story": "Nada escapa a su atenta mirada.", "image": "assets/personajes/08-arandana.jpg"}, {"id": 9, "name": "Doctor Azúcar", "role": "Villano", "power": "La tentación", "story": "Quiere llenar la ciudad de excesos y hacer que todos pierdan el equilibrio.", "image": "assets/personajes/09-doctor-azucar.jpg"}, {"id": 10, "name": "Aceite Negro", "role": "Villano", "power": "Pesadez", "story": "Intenta dejar a todos sin energía y movimiento.", "image": "assets/personajes/10-aceite-negro.jpg"}, {"id": 11, "name": "Señor Exceso", "role": "Villano", "power": "Falta de control", "story": "Su poder es hacer que nadie sepa cuándo parar.", "image": "assets/personajes/11-senor-exceso.jpg"}, {"id": 12, "name": "Desnutrición", "role": "Villano", "power": "Debilidad", "story": "Busca dejar a las personas sin energía ni fuerzas.", "image": "assets/personajes/12-desnutrion.jpg"}, {"id": 13, "name": "Sal Extrema", "role": "Villano", "power": "Desequilibrio", "story": "Intenta que todos olviden la importancia del equilibrio.", "image": "assets/personajes/13-sal-extrema.jpg"}, {"id": 14, "name": "Naturaleza en Peligro", "role": "Villano", "power": "Contaminación", "story": "Daña el planeta y pone en peligro nuestro hogar.", "image": "assets/personajes/14-naturaleza-en-peligro.jpg"}, {"id": 15, "name": "Sr. Artificial", "role": "Villano", "power": "Lo artificial", "story": "Quiere llenar todo de ingredientes que nadie necesita.", "image": "assets/personajes/15-sr-artificial.jpg"}, {"id": 16, "name": "Dulce Tentación", "role": "Villano", "power": "Adicción", "story": "Te convence de que siempre necesitás un poquito más.", "image": "assets/personajes/16-dulce-tentacion.jpg"}];
 const USERS_KEY="SP_USERS_V2";
@@ -338,9 +339,21 @@ function refreshAdmin(){const codes=codesDB(), total=Object.keys(codes).length, 
 function exportCodesCSV(){const codes=codesDB(), rows=[["codigo","figurita_id","personaje","estado","usuario","fecha_canje"]];Object.entries(codes).forEach(([code,x])=>{const ch=characters.find(c=>c.id===x.characterId);rows.push([code,x.characterId,ch?ch.name:"",x.redeemedBy?"USADO":"DISPONIBLE",x.redeemedBy||"",x.redeemedAt||""])});const csv=rows.map(r=>r.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(",")).join("\n"),blob=new Blob([csv],{type:"text/csv;charset=utf-8;"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="super-prisma-codigos.csv";a.click();URL.revokeObjectURL(url)}
 
 function init(){
+ const seeded=codesDB();
+ Object.entries(PRISMA_PRINT_CODES).forEach(([code,characterId])=>{
+   if(!seeded[code]) seeded[code]={characterId,createdAt:"2026-08-27T00:00:00.000Z",redeemedBy:null,redeemedAt:null};
+ });
+ saveCodes(seeded);
  const sel=document.getElementById("adminCharacter");characters.forEach(c=>{const o=document.createElement("option");o.value=c.id;o.textContent=`${String(c.id).padStart(2,"0")} · ${c.name}`;sel.appendChild(o)});
  startMemory();newQuiz();[1,2,3].forEach(n=>{if(localStorage.getItem("spMission"+n))completeMission(n)});
  const session=localStorage.getItem(SESSION_KEY),d=usersDB();if(session&&d[session]){currentUser=session;collected=d[session].collected||[];showLoggedIn();render()}else render();
+ const incoming=normalizeCode(new URLSearchParams(location.search).get("codigo")||"");
+ if(incoming){
+   document.getElementById("stickerCode").value=incoming;
+   const box=document.getElementById("redeemMsg");box.className="notice ok";
+   box.textContent=currentUser?"Código leído. Tocá Desbloquear para sumarlo a tu álbum.":"Código leído. Ingresá a tu álbum y después tocá Desbloquear.";
+   setTimeout(()=>document.getElementById("canjear").scrollIntoView({behavior:"smooth",block:"start"}),250);
+ }
 }
 init();
 </script>
