@@ -1,4 +1,4 @@
-// Primera tanda impresa Super Prisma - 30 figuritas autoadhesivas.
+// Primera tanda completa Super Prisma - 45 figuritas: colección de 24 + 21 repetidas.
 const PRISMA_PRINT_CODES = {
   "SP01-7K4M-2Q9R": 1,
   "SP02-9R2X-5V8N": 2,
@@ -16,6 +16,14 @@ const PRISMA_PRINT_CODES = {
   "SP14-4F7L-6B3T": 14,
   "SP15-6B3T-2K8W": 15,
   "SP16-2K8W-7R5M": 16,
+  "SP17-4G8N-2V6K": 17,
+  "SP18-7C3L-9H5Q": 18,
+  "SP19-2M8R-6T4W": 19,
+  "SP20-9V5B-3K7N": 20,
+  "SP21-6H2F-8Q4M": 21,
+  "SP22-3R7W-5L9C": 22,
+  "SP23-8K4N-2B6T": 23,
+  "SP24-5Q9M-7V3H": 24,
   "SP01-3T7B-8L5H": 1,
   "SP02-6V9C-2M4Q": 2,
   "SP03-8N3F-7K2R": 3,
@@ -29,5 +37,12 @@ const PRISMA_PRINT_CODES = {
   "SP11-5V2H-6M9Q": 11,
   "SP12-7L9W-3C5R": 12,
   "SP13-2Q6B-8F4N": 13,
-  "SP14-9T3M-5V7K": 14
+  "SP14-9T3M-5V7K": 14,
+  "SP15-4D8R-2H6N": 15,
+  "SP16-7M3Q-9C5L": 16,
+  "SP17-2V6K-4G8N": 17,
+  "SP18-5H9Q-7C3L": 18,
+  "SP19-8T4W-2M6R": 19,
+  "SP20-3K7N-9V5B": 20,
+  "SP21-6Q4M-8H2F": 21
 };
