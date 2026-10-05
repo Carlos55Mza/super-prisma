@@ -206,22 +206,77 @@ footer{background:var(--deep);color:#dce7fa;text-align:center;padding:45px 20px}
 <section id="historias" class="section">
   <div class="eyebrow">BIBLIOTECA SUPER PRISMA</div>
   <h2>📖 Historietas Super Prisma</h2>
-  <p class="lead">Leé las aventuras de los héroes y villanos de Super Prisma. Cada nuevo capítulo amplía el universo de la colección.</p>
+  <p class="lead">
+    Leé las aventuras de los héroes y villanos de Super Prisma.
+    Elegí un capítulo y entrá a Ciudad Prisma.
+  </p>
+
   <div class="comic-library">
+
     <article class="comic-card">
-      <img class="cover" src="assets/historietas/historieta-01-doctor-azucar.png" alt="Historieta 1 - La amenaza del Doctor Azúcar" onclick="openComic()">
-      <div class="eyebrow" style="color:#ffd23f;margin-top:18px">HISTORIETA #1 · DISPONIBLE</div>
+      <img class="cover"
+           src="assets/historietas/historieta-01-doctor-azucar.png"
+           alt="Historieta 1 - La amenaza del Doctor Azúcar"
+           onclick="openComic('assets/historietas/historieta-01-doctor-azucar.png', 'Historieta 1 - La amenaza del Doctor Azúcar')">
+      <div class="eyebrow" style="color:#ffd23f;margin-top:18px">
+        HISTORIETA #1
+      </div>
       <h3>La amenaza del Doctor Azúcar</h3>
-      <p>Doctor Azúcar activa su Máquina Mega Dulce y pone en peligro Ciudad Prisma. Capitán Prisma, Capitana Prisma y el equipo deberán unir sus poderes para detenerlo.</p>
-      <button class="btn primary" onclick="openComic()">📖 Leer historieta</button>
+      <p>Doctor Azúcar activa su Máquina Mega Dulce y pone en peligro Ciudad Prisma.</p>
+      <button class="btn primary"
+        onclick="openComic('assets/historietas/historieta-01-doctor-azucar.png', 'Historieta 1 - La amenaza del Doctor Azúcar')">
+        📖 Leer historieta
+      </button>
     </article>
-    <aside class="comic-coming">
-      <div class="eyebrow">PRÓXIMAS AVENTURAS</div><h3>La historia recién comienza…</h3>
-      <p class="lead">Nuevos capítulos irán apareciendo en la Academia.</p>
-      <div class="next">🔒 Historieta #2 · Próximamente</div>
-      <div class="next">🔒 Historieta #3 · Próximamente</div>
-      <div class="next">🔒 Historieta #4 · Próximamente</div>
-    </aside>
+
+    <article class="comic-card">
+      <img class="cover"
+           src="assets/historietas/historieta-02-senor-pantalla.png"
+           alt="Historieta 2 - El regreso del Doctor Azúcar"
+           onclick="openComic('assets/historietas/historieta-02-senor-pantalla.png', 'Historieta 2')">
+      <div class="eyebrow" style="color:#ffd23f;margin-top:18px">
+        HISTORIETA #2
+      </div>
+      <h3>El regreso del Doctor Azúcar</h3>
+      <p>Doctor Azúcar encuentra un nuevo aliado: el misterioso Señor Pantalla.</p>
+      <button class="btn primary"
+        onclick="openComic('assets/historietas/historieta-02-senor-pantalla.png', 'Historieta 2')">
+        📖 Leer historieta
+      </button>
+    </article>
+
+    <article class="comic-card">
+      <img class="cover"
+           src="assets/historietas/historieta-03-torre-senor-pantalla.png"
+           alt="Historieta 3 - La Torre del Señor Pantalla"
+           onclick="openComic('assets/historietas/historieta-03-torre-senor-pantalla.png', 'Historieta 3')">
+      <div class="eyebrow" style="color:#ffd23f;margin-top:18px">
+        HISTORIETA #3
+      </div>
+      <h3>La Torre del Señor Pantalla</h3>
+      <p>Los Guardianes entran en acción para liberar Ciudad Prisma de una poderosa señal.</p>
+      <button class="btn primary"
+        onclick="openComic('assets/historietas/historieta-03-torre-senor-pantalla.png', 'Historieta 3')">
+        📖 Leer historieta
+      </button>
+    </article>
+
+    <article class="comic-card">
+      <img class="cover"
+           src="assets/historietas/historieta-04-nave-oscura.png"
+           alt="Historieta 4 - La invasión de la Nave Oscura"
+           onclick="openComic('assets/historietas/historieta-04-nave-oscura.png', 'Historieta 4')">
+      <div class="eyebrow" style="color:#ffd23f;margin-top:18px">
+        HISTORIETA #4
+      </div>
+      <h3>La invasión de la Nave Oscura</h3>
+      <p>Una amenaza llega desde el cielo y todos los Guardianes deberán unir sus fuerzas.</p>
+      <button class="btn primary"
+        onclick="openComic('assets/historietas/historieta-04-nave-oscura.png', 'Historieta 4')">
+        📖 Leer historieta
+      </button>
+    </article>
+
   </div>
 </section>
 
