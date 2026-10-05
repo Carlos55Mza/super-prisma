@@ -409,7 +409,15 @@ document.getElementById("stickerCode").addEventListener("keydown",e=>{if(e.key==
 
 function completeMission(n){localStorage.setItem("spMission"+n,"1");const m=document.getElementById("m"+n);if(!m)return;m.classList.add("done");const b=m.querySelector("button");if(b)b.textContent="✓ Completada"}
 function checkCollection(){alert("Tu colección está en "+collected.length+" de "+characters.length+" personajes.");document.querySelector("#coleccion").scrollIntoView()}
-function openComic(){const v=document.getElementById("comicViewer");v.classList.add("show");v.setAttribute("aria-hidden","false");document.body.style.overflow="hidden"}
+function openComic(src, alt){
+  const v=document.getElementById("comicViewer");
+  const img=v.querySelector("img");
+  if(src) img.src=src;
+  if(alt) img.alt=alt;
+  v.classList.add("show");
+  v.setAttribute("aria-hidden","false");
+  document.body.style.overflow="hidden";
+}
 function closeComic(){const v=document.getElementById("comicViewer");v.classList.remove("show");v.setAttribute("aria-hidden","true");document.body.style.overflow=""}
 document.addEventListener("keydown",e=>{if(e.key==="Escape")closeComic()})
 function storyAlert(){openComic()}
